@@ -31,5 +31,12 @@ services:
     depends_on:
       - nestjs
 
+  web:
+    build: .
+    ports:
+      - '4173:5000'
+    depends_on:
+      - vite_react
+
 volumes:
   my-app:
