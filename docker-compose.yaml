@@ -1,4 +1,4 @@
-version: '3.8'
+version: '3.9'
 
 name: linda 
 services:
@@ -23,6 +23,15 @@ services:
     volumes:
       - my-app:/data/db 
 
+  web:
+    build:
+      context: .
+      dockerfile: nginx/Dockerfile
+    ports:
+      - '8000:8000'
+    depends_on:
+      - vite_react
+
   vite_react:
     build:
       context: .
@@ -31,13 +40,6 @@ services:
       - '4173:4173'  
     depends_on:
       - nestjs
-
-  web:
-    build: .
-    ports:
-      - '4173:8000'
-    depends_on:
-      - vite_react
 
 volumes:
   my-app:
