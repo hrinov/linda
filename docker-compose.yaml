@@ -31,7 +31,7 @@ services:
       context: .
       dockerfile: nginx/Dockerfile
     ports:
-      - '5000:80'
+      - '80:80' 
     depends_on:
       - vite_react
     restart: always 
