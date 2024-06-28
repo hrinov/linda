@@ -1,6 +1,7 @@
 version: '3.9'
 
-name: linda 
+name: linda
+
 services:
   nestjs:
     build:
@@ -13,6 +14,7 @@ services:
       MONGO_URL: mongodb://mongo:27017/open_db 
     depends_on:
       - mongo
+    restart: always 
 
   mongo:
     image: mongo:latest
@@ -22,6 +24,7 @@ services:
       - '27017:27017'
     volumes:
       - my-app:/data/db 
+    restart: always  
 
   web:
     build:
@@ -31,6 +34,7 @@ services:
       - '5000:80'
     depends_on:
       - vite_react
+    restart: always 
 
   vite_react:
     build:
@@ -40,6 +44,7 @@ services:
       - '4173:4173'  
     depends_on:
       - nestjs
+    restart: always  
 
 volumes:
   my-app:
