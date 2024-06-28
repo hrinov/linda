@@ -2,26 +2,26 @@ version: '3.9'
 
 name: linda 
 services:
-  # nestjs:
-  #   build:
-  #     context: .
-  #     dockerfile: server/Dockerfile
-  #   ports:
-  #     - '3000:3000'
-  #   environment:
-  #     NODE_ENV: production
-  #     MONGO_URL: mongodb://mongo:27017/open_db 
-  #   depends_on:
-  #     - mongo
+  nestjs:
+    build:
+      context: .
+      dockerfile: server/Dockerfile
+    ports:
+      - '3000:3000'
+    environment:
+      NODE_ENV: production
+      MONGO_URL: mongodb://mongo:27017/open_db 
+    depends_on:
+      - mongo
 
-  # mongo:
-  #   image: mongo:latest
-  #   environment:
-  #     MONGO_INITDB_DATABASE: open_db  
-  #   ports:
-  #     - '27017:27017'
-  #   volumes:
-  #     - my-app:/data/db 
+  mongo:
+    image: mongo:latest
+    environment:
+      MONGO_INITDB_DATABASE: open_db  
+    ports:
+      - '27017:27017'
+    volumes:
+      - my-app:/data/db 
 
   web:
     build:
@@ -38,8 +38,8 @@ services:
       dockerfile: website/Dockerfile
     ports:
       - '4173:4173'  
-    # depends_on:
-    #   - nestjs
+    depends_on:
+      - nestjs
 
 volumes:
   my-app:
