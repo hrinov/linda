@@ -1,0 +1,22 @@
+.main-wrapper
+    overflow: scroll
+    height: 100vh
+    .view-scope
+        overflow: hidden
+
+        .images-wrapper
+            display: grid
+            grid-template-columns: 1fr 1fr 1fr
+            column-gap: 24px
+            padding-right: calc((100vw - 1440px) / 2)
+            padding-left: calc((100vw - 1440px) / 2)
+
+        .row-wrapper
+            width: 100%
+            display: flex
+            flex-direction: column
+            gap: 24px
+            height: fit-content
+
+            img
+                width: 100%
