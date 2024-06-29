@@ -1,4 +1,5 @@
 import { FC, useEffect, useRef, useState } from "react";
+import { CSSTransition, SwitchTransition } from "react-transition-group";
 import "./index.sass";
 
 export const Home: FC = () => {
@@ -93,18 +94,46 @@ export const Home: FC = () => {
   }, [page]);
 
   return (
-    <div className="main-wrapper" onScroll={onScroll}>
-      <div
-        className="view-scope"
-        style={maxScrollPoint ? { height: maxScrollPoint } : {}}
-      >
-        <div className="images-wrapper" ref={wrapperRef}>
-          {Array.from({ length: rows }, (_, index) =>
-            imageBlock(list, index + 1)
-          )}
-        </div>
+    <>
+      <div className="main-wrapper" onScroll={onScroll}>
+        <header>
+          <div className="switchers-holder">
+            <div
+              className={rows == 3 ? "active" : ""}
+              onClick={() => rows !== 3 && setRows(3)}
+            >
+              |||
+            </div>
+            <div
+              className={rows == 5 ? "active" : ""}
+              onClick={() => rows !== 5 && setRows(5)}
+            >
+              |||||
+            </div>
+          </div>
+        </header>
+        <SwitchTransition mode={"out-in"}>
+          <CSSTransition
+            key={rows}
+            classNames="fade"
+            appear={true}
+            timeout={0}
+            unmountOnExit
+          >
+            <div
+              className="view-scope"
+              style={maxScrollPoint ? { height: maxScrollPoint } : {}}
+            >
+              <div className={`images-wrapper rows-${rows}`} ref={wrapperRef}>
+                {Array.from({ length: rows }, (_, index) =>
+                  imageBlock(list, index + 1)
+                )}
+              </div>
+            </div>
+          </CSSTransition>
+        </SwitchTransition>
       </div>
-    </div>
+    </>
   );
 };
 
