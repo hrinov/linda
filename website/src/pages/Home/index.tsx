@@ -1,8 +1,11 @@
 import { FC, useEffect, useRef, useState } from "react";
 import { CSSTransition, SwitchTransition } from "react-transition-group";
+import ArrowDown from "./../../assets/icons/arrow-down.svg?react";
+import { ModalWindow } from "./components/ModalWindow";
 import "./index.sass";
 
 export const Home: FC = () => {
+  const [modalStatus, setModalStatus] = useState<{ item: any } | null>();
   const wrapperRef = useRef(null);
   const [rows, setRows] = useState(3);
   const [list, setList] = useState<any[]>([]);
@@ -10,6 +13,17 @@ export const Home: FC = () => {
   const pageSize = 18;
   const [lastList, setLastList] = useState(false);
   const [maxScrollPoint, setMaxScrollPoint] = useState<number | null>(null);
+
+  const closeModal = () => setModalStatus(null);
+
+  const handleDownload = (e, link: string) => {
+    e.preventDefault();
+    window.open(link, "_blank", "noopener,noreferrer");
+  };
+
+  const handleItemClick = (item) => {
+    setModalStatus({ item });
+  };
 
   const getItems = async () => {
     try {
@@ -80,8 +94,12 @@ export const Home: FC = () => {
             className="image-wrapper"
             style={{ aspectRatio: `${item.width} / ${item.height}` }}
             key={`${item.id}-${rowNum}-${i}`}
+            onClick={() => handleItemClick(item)}
           >
             <img src={item.urls.small} />
+            <a onClick={(e) => handleDownload(e, item.links.download)}>
+              <ArrowDown />
+            </a>
           </div>
         ))}
       </div>
@@ -133,6 +151,11 @@ export const Home: FC = () => {
           </CSSTransition>
         </SwitchTransition>
       </div>
+      <ModalWindow
+        isOpen={!!modalStatus?.item}
+        item={modalStatus?.item}
+        close={closeModal}
+      />
     </>
   );
 };

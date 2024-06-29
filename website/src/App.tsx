@@ -7,7 +7,6 @@ const Router: FC = () => {
   const router = createBrowserRouter(
     !localStorage.getItem("accessToken") ? accountRoutes : guestRoutes
   );
-  console.log(localStorage.getItem("accessToken"));
   return <RouterProvider router={router} />;
 };
 
