@@ -2,16 +2,15 @@ import { FC, useEffect, useRef, useState } from "react";
 import "./index.sass";
 
 export const Home: FC = () => {
+  const wrapperRef = useRef(null);
   const [rows, setRows] = useState(3);
-  const wrapperRef = useRef<HTMLDivElement>(null);
-  const [loading, setLoading] = useState(false);
   const [list, setList] = useState<any[]>([]);
   const [page, setPage] = useState(1);
   const pageSize = 18;
   const [lastList, setLastList] = useState(false);
+  const [maxScrollPoint, setMaxScrollPoint] = useState<number | null>(null);
 
   const getItems = async () => {
-    setLoading(true);
     try {
       const response = await fetch(
         `https://api.unsplash.com/photos/random?count=${pageSize}&page=${page}&client_id=${
@@ -29,12 +28,22 @@ export const Home: FC = () => {
     } catch (error) {
       console.error("Error fetching photos:", error);
     }
-    setLoading(false);
+    setMaxScrollPoint(null);
+  };
+
+  const getMaxScrollPoint = () => {
+    const rowsHeights: number[] = [];
+    wrapperRef.current.childNodes.forEach((item) =>
+      rowsHeights.push(item.scrollHeight)
+    );
+    const scrollPoint = Math.min(...rowsHeights);
+    maxScrollPoint !== scrollPoint && setMaxScrollPoint(scrollPoint);
   };
 
   const onScroll = (e) => {
+    getMaxScrollPoint();
     const item = e.target;
-    if (!item || loading || lastList) return;
+    if (lastList) return;
     const { scrollTop, scrollTopMax } = item;
 
     if (scrollTop == scrollTopMax) {
@@ -48,15 +57,15 @@ export const Home: FC = () => {
       arr.push(i);
     }
 
-    const result: number[][] = [];
-    const size = Math.ceil(arr.length / rows); // Size of each part
+    const groups: number[][] = Array.from({ length: rows }, () => []);
+    arr.forEach((number, index) => {
+      const groupIndex = index % rows;
+      if (groupIndex === partNum - 1) {
+        groups[groupIndex].push(number);
+      }
+    });
 
-    for (let i = 0; i < arr.length; i += size) {
-      const part = arr.slice(i, i + size);
-      result.push(part);
-    }
-
-    return result[partNum - 1];
+    return groups[partNum - 1];
   };
 
   const imageBlock = (list: any[], rowNum: number) => {
@@ -65,9 +74,13 @@ export const Home: FC = () => {
 
     return (
       <div className="row-wrapper" key={rowNum}>
-        {items.map((item) => (
-          <div className="image-wrapper" key={item.id}>
-            <img src={item.urls.small} alt={`Image ${item.id}`} />
+        {items.map((item, i) => (
+          <div
+            className="image-wrapper"
+            style={{ aspectRatio: `${item.width} / ${item.height}` }}
+            key={`${item.id}-${rowNum}-${i}`}
+          >
+            <img src={item.urls.small} />
           </div>
         ))}
       </div>
@@ -75,19 +88,15 @@ export const Home: FC = () => {
   };
 
   useEffect(() => {
-    if (!list.length && !loading && page === 1) getItems();
-    if (!loading && page > 1) getItems();
+    if (!list.length && page === 1) getItems();
+    if (maxScrollPoint && page > 1) getItems();
   }, [page]);
 
   return (
     <div className="main-wrapper" onScroll={onScroll}>
       <div
         className="view-scope"
-        style={{
-          height:
-            wrapperRef?.current?.clientHeight - window.innerHeight / 2 ||
-            "100vh",
-        }}
+        style={maxScrollPoint ? { height: maxScrollPoint } : {}}
       >
         <div className="images-wrapper" ref={wrapperRef}>
           {Array.from({ length: rows }, (_, index) =>
