@@ -145,7 +145,9 @@ export const Home: FC = () => {
           >
             <div
               className="view-scope"
-              style={maxScrollPoint ? { height: maxScrollPoint } : {}}
+              style={
+                maxScrollPoint && !mobileMode ? { height: maxScrollPoint } : {}
+              }
             >
               <div className={`images-wrapper rows-${rows}`} ref={wrapperRef}>
                 {Array.from({ length: rows }, (_, index) =>

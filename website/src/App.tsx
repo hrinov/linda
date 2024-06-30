@@ -9,14 +9,14 @@ const url =
     : import.meta.env.VITE_LOCAL_URL;
 
 const Router: FC = () => {
-  const [loading, setLoading] = useState(true)
-  const [user, setUser] = useState<User>()
+  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState<User>();
 
   const getUser = async () => {
-    const accessToken = localStorage.getItem('access_token');
+    const accessToken = localStorage.getItem("access_token");
     if (!accessToken) {
-      setLoading(false)
-      return
+      setLoading(false);
+      return;
     }
 
     const requestOptions = {
@@ -25,26 +25,30 @@ const Router: FC = () => {
       },
     };
 
-    const response = await fetch(url + 'me', requestOptions);
+    const response = await fetch(url + "me", requestOptions);
     if (!response.ok) {
-      setLoading(false)
-      return
+      setLoading(false);
+      return;
     }
 
-    const { user } = await response.json() as { user: User }
-    setUser(user)
-    setLoading(false)
-  }
+    const { user } = (await response.json()) as { user: User };
+    setUser(user);
+    setLoading(false);
+  };
 
-  const router = createBrowserRouter(user ? accountRoutes : guestRoutes);
+  const router = createBrowserRouter(!user ? accountRoutes : guestRoutes);
 
   useEffect(() => {
-    getUser()
-  }, [])
+    getUser();
+  }, []);
 
-  return loading ? 
-  <div className="loading-page"><Spin/></div> : 
-  <RouterProvider router={ router } />;
+  return loading ? (
+    <div className="loading-page">
+      <Spin />
+    </div>
+  ) : (
+    <RouterProvider router={router} />
+  );
 };
 
 const App: FC = () => <Router />;

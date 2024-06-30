@@ -6,7 +6,7 @@ export const Redirect = () => {
   const isUserAuthorized = localStorage.getItem("access_token");
 
   useEffect(() => {
-    if (isUserAuthorized) {
+    if (!isUserAuthorized) {
       navigate("/home");
     } else {
       navigate("/login");
