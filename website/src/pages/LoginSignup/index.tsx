@@ -3,7 +3,7 @@ import { FC, useState } from "react";
 import EyeOpen from "../../assets/icons/eye.svg?react";
 import EyeClose from "../../assets/icons/eye-off.svg?react";
 import { useNavigate } from "react-router-dom";
-import { Helmet } from "react-helmet-async";
+import { Helmet } from "react-helmet";
 
 const url =
   import.meta.env.MODE == "production"
@@ -90,7 +90,7 @@ export const LoginSignup: FC<{ type: string }> = ({ type }) => {
   return (
     <>
       <Helmet>
-        <title>Linda-{type}</title>
+        <title>Linda first page</title>
       </Helmet>
 
       <section className="login-page">

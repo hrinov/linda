@@ -19,7 +19,12 @@ export const ModalWindow: FC<ModalWIndowProps> = ({ item, close }) => {
   return (
     <Modal footer={false} open={!!item} onCancel={close}>
       <div className="user-info">
-        {item && <img src={item?.user?.profile_image?.medium} />}
+        {item && (
+          <img
+            src={item?.user?.profile_image?.medium}
+            style={{ aspectRatio: `${item.width} / ${item.height}` }}
+          />
+        )}
         {item?.user?.name}
       </div>
       <img src={item?.urls?.regular} />
