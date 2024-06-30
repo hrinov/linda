@@ -8,7 +8,8 @@ import { Header } from "./components/Header";
 export const Home: FC = () => {
   const [modalStatus, setModalStatus] = useState<{ item: PhotoData } | null>();
   const wrapperRef = useRef(null);
-  const [rows, setRows] = useState(3);
+  const [mobileMode, setMobileMode] = useState<boolean>(false); 
+  const [rows, setRows] = useState(mobileMode ? 1 : 3);
   const [list, setList] = useState<PhotoData[]>([]);
   const [page, setPage] = useState(1);
   const pageSize = 18;
@@ -113,10 +114,26 @@ export const Home: FC = () => {
     if (maxScrollPoint && page > 1) getItems();
   }, [page]);
 
+  useEffect(() => {
+   const checkWindowSize = () => {
+    setMobileMode(window.innerWidth < 768)
+    if (window.innerWidth < 768) {
+      setRows(1)
+    } else {
+      setRows(3)
+    }
+   }
+    checkWindowSize();
+    window.addEventListener('resize', checkWindowSize);
+
+    return () => {window.removeEventListener('resize', checkWindowSize)}
+  }, [])
+
+
   return (
     <>
       <section className="main-wrapper" onScroll={onScroll}>
-        <Header {...{ rows, setRows }} />
+        <Header {...{ rows, setRows, mobileMode }} />
         <SwitchTransition mode={"out-in"}>
           <CSSTransition
             key={rows}

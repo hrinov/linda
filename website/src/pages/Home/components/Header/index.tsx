@@ -2,13 +2,19 @@ import { FC } from "react";
 import "./index.sass";
 import Logout from "./../../../../assets/icons/logout.svg?react";
 
-export const Header: FC<HeaderProps> = ({ rows, setRows }) => {
+export const Header: FC<HeaderProps> = ({ rows, setRows, mobileMode }) => {
+    const handleLogout = () => {
+        localStorage.clear()
+        window.location.href = "/account/home"
+    }
+
   return (
     <header>
-      <div className="logout-btn">
+      <div className="logout-btn" onClick={handleLogout}>
         <Logout />
       </div>
-      <div className="switchers-holder">
+      {!mobileMode && 
+      (<div className="switchers-holder">
         <div
           className={rows == 3 ? "active" : ""}
           onClick={() => rows !== 3 && setRows(3)}
@@ -22,6 +28,8 @@ export const Header: FC<HeaderProps> = ({ rows, setRows }) => {
           |||||
         </div>
       </div>
+      )}
+
       <div />
     </header>
   );

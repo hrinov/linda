@@ -12,10 +12,20 @@
     .view-scope
         overflow: hidden
 
+        @media (max-width: 767px)
+            display: flex
+            justify-content: center
+
         .images-wrapper
             display: grid
-            width: 1352px
+            width: 92vw
             column-gap: 24px
+
+            @media (max-width: 767px)
+                width: calc (100vw - 32 px)
+
+            &.rows-1
+                grid-template-columns: 1fr
 
             &.rows-3
                 grid-template-columns: repeat(#{3}, 1fr)
@@ -64,6 +74,10 @@
                     background-color: #fff
                     opacity: 0
                     transition-duration: 0.2s
+
+                    @media (max-width: 1024px)
+                        bottom: 14px
+                        right: 14px
 
                     &:hover
                         opacity: 1

@@ -32,21 +32,15 @@ export class AppController {
     @Body() userDto: UserDto,
   ): Promise<{ access_token: string }> {
     const { email, password } = userDto;
-    if (!email || !password) {
+
+    const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+    if (!email || !password || password.length < 6 || !isValidEmail) {
       throw new BadRequestException('Invalid email or password');
     }
 
-    if (password.length < 6) {
-      throw new BadRequestException('Invalid password');
-    }
-
-    const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-    if (!isValidEmail) {
-      throw new BadRequestException('Invalid email address');
-    }
-
     const user = await this.appService.findUser(email);
-
+    console.log(123, user);
     if (user) throw new BadRequestException('User already exists');
 
     const { access_token } = await this.appService.createUser(userDto);

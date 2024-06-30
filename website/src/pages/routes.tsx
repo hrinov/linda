@@ -1,17 +1,16 @@
 import { Redirect } from "./redirect";
-import { Login } from "./Login";
-import { SignUp } from "./SignUp";
+import { LoginSignup } from "./LoginSignup";
 import { Home } from "./Home";
 import { RouteObject } from "react-router-dom";
 
 const guestRoutes: RouteObject[] = [
   {
-    Component: Login,
+    element: <LoginSignup type={"login"}/>,
     path: "/login",
     index: true,
   },
   {
-    Component: SignUp,
+    element: <LoginSignup type={"signup"}/>,
     path: "/signup",
   },
   {

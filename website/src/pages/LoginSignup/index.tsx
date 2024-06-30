@@ -1,17 +1,17 @@
 import { Spin } from "antd";
 import { FC, useState } from "react";
-import EyeOpen from "./../../assets/icons/eye.svg?react";
-import EyeClose from "./../../assets/icons/eye-off.svg?react";
+import EyeOpen from "../../assets/icons/eye.svg?react";
+import EyeClose from "../../assets/icons/eye-off.svg?react";
 import { useNavigate } from "react-router-dom";
+
 const url =
   import.meta.env.MODE == "production"
     ? import.meta.env.VITE_BASE_URL
     : import.meta.env.VITE_LOCAL_URL;
 import "./index.sass";
 
-export const SignUp: FC = () => {
-  const navigate = useNavigate();
-
+export const LoginSignup: FC<{type: string}> = ({type}) => {
+  const navigate = useNavigate()
   const [error, setError] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -31,22 +31,29 @@ export const SignUp: FC = () => {
     }
 
     try {
-      const response = await fetch(url + 'login', requestOptions);
+      const response = await fetch(url + type, requestOptions);
       if (!response.ok) {
         const error = await response.json()
         throw new Error(error?.message);
       }
       const data = await response.json();
-     
+ 
       if (data?.access_token) {
-         localStorage.setItem('access_token', data.accessToken);
-         navigate("/account/deposits/plans")
+         localStorage.setItem('access_token', data.access_token);
+         window.location.href = "/account/home"
       } else {setError("Something went wrong")}
        
     } catch (error: any) {
       setError(error?.message || "Something went wrong")
     }
      setLoading(false);
+  }
+
+  const handleChangePage = () => {
+    setEmail("")
+    setPassword("")
+    setError("")
+    navigate(type == "login" ? "/signup" : "/login")
   }
 
   const createInput = (
@@ -81,13 +88,13 @@ export const SignUp: FC = () => {
   return (
     <section className="login-page">
       <button
-        children={"Sign Up"}
+        children={type == "login" ? "Sign Up": "Login"}
         className={"signup-btn"}
-        onClick={() => navigate("/signup")}
+        onClick={handleChangePage}
       />
 
       <div className="inputs-wrapper">
-        <div className="title-wrapper" children={"Login"} />
+        <div className="title-wrapper" children={type == "login" ? "Login" : "SignUp"} />
         {createInput(email, "email", (e) => setEmail(e.target.value))}
         {createInput(password, "password", (e) => setPassword(e.target.value))}
         <div

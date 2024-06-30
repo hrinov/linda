@@ -110,10 +110,18 @@ interface ModalWIndowProps {
 }
 
 interface HeaderProps {
+  mobileMode: boolean
   rows: number;
   setRows: React.Dispatch<SetStateAction<number>>;
 }
 
 interface MeResponse {
   access_token: string;
+}
+
+interface User {
+  user_id?: string;
+  email: string;
+  password?: string;
+  access_token?: string;
 }

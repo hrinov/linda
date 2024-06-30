@@ -19,7 +19,7 @@ export const ModalWindow: FC<ModalWIndowProps> = ({ item, close }) => {
   return (
     <Modal footer={false} open={!!item} onCancel={close}>
       <div className="user-info">
-        <img src={item?.user?.profile_image?.medium} />
+        {item && <img src={item?.user?.profile_image?.medium} />}
         {item?.user?.name}
       </div>
       <img src={item?.urls?.regular} />

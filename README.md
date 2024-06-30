@@ -1,3 +1,2 @@
-docker-compose up --build
-mongodb://localhost:27017/open_db
-http://ruslan-hrinov.online/
+start prod: docker-compose -f docker-compose.yaml up --build
+start dev: docker-compose -f docker-compose.yaml -f docker-compose.override.yaml up --build
