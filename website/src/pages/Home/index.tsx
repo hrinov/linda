@@ -146,7 +146,11 @@ export const Home: FC = () => {
             <div
               className="view-scope"
               style={
-                maxScrollPoint && !mobileMode ? { height: maxScrollPoint } : {}
+                maxScrollPoint && !mobileMode
+                  ? { height: maxScrollPoint }
+                  : mobileMode
+                  ? { height: "fitContent" }
+                  : {}
               }
             >
               <div className={`images-wrapper rows-${rows}`} ref={wrapperRef}>
