@@ -3,12 +3,13 @@ import { CSSTransition, SwitchTransition } from "react-transition-group";
 import ArrowDown from "./../../assets/icons/arrow-down.svg?react";
 import { ModalWindow } from "./components/ModalWindow";
 import "./index.sass";
+import { Header } from "./components/Header";
 
 export const Home: FC = () => {
-  const [modalStatus, setModalStatus] = useState<{ item: any } | null>();
+  const [modalStatus, setModalStatus] = useState<{ item: PhotoData } | null>();
   const wrapperRef = useRef(null);
   const [rows, setRows] = useState(3);
-  const [list, setList] = useState<any[]>([]);
+  const [list, setList] = useState<PhotoData[]>([]);
   const [page, setPage] = useState(1);
   const pageSize = 18;
   const [lastList, setLastList] = useState(false);
@@ -17,6 +18,7 @@ export const Home: FC = () => {
   const closeModal = () => setModalStatus(null);
 
   const handleDownload = (e, link: string) => {
+    e.stopPropagation();
     e.preventDefault();
     window.open(link, "_blank", "noopener,noreferrer");
   };
@@ -83,7 +85,7 @@ export const Home: FC = () => {
     return groups[partNum - 1];
   };
 
-  const imageBlock = (list: any[], rowNum: number) => {
+  const imageBlock = (list: PhotoData[], rowNum: number) => {
     const rowItems = defineRowSize(rowNum);
     const items = list.filter((_, i) => rowItems.includes(i + 1));
 
@@ -113,23 +115,8 @@ export const Home: FC = () => {
 
   return (
     <>
-      <div className="main-wrapper" onScroll={onScroll}>
-        <header>
-          <div className="switchers-holder">
-            <div
-              className={rows == 3 ? "active" : ""}
-              onClick={() => rows !== 3 && setRows(3)}
-            >
-              |||
-            </div>
-            <div
-              className={rows == 5 ? "active" : ""}
-              onClick={() => rows !== 5 && setRows(5)}
-            >
-              |||||
-            </div>
-          </div>
-        </header>
+      <section className="main-wrapper" onScroll={onScroll}>
+        <Header {...{ rows, setRows }} />
         <SwitchTransition mode={"out-in"}>
           <CSSTransition
             key={rows}
@@ -150,12 +137,8 @@ export const Home: FC = () => {
             </div>
           </CSSTransition>
         </SwitchTransition>
-      </div>
-      <ModalWindow
-        isOpen={!!modalStatus?.item}
-        item={modalStatus?.item}
-        close={closeModal}
-      />
+      </section>
+      <ModalWindow item={modalStatus?.item} close={closeModal} />
     </>
   );
 };

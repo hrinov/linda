@@ -1,12 +1,23 @@
 import { FC } from "react";
 import { Modal } from "antd";
-import Location from "./../../../../assets/icons/location.svg?react";
+import Book from "./../../../../assets/icons/book.svg?react";
 import "./index.sass";
 
-export const ModalWindow: FC<ModalWIndowProps> = ({ isOpen, item, close }) => {
-  console.log(item);
+export const ModalWindow: FC<ModalWIndowProps> = ({ item, close }) => {
+  const capitalizeAndAddDot = (text: string | undefined) => {
+    if (!text) return "-";
+    const capitalizedText = text.charAt(0).toUpperCase() + text.slice(1);
+    if (capitalizedText?.length > 55) {
+      return capitalizedText.substring(1, 55) + "...";
+    } else {
+      return capitalizedText.endsWith(".")
+        ? capitalizedText
+        : capitalizedText + ".";
+    }
+  };
+
   return (
-    <Modal footer={false} open={isOpen} onCancel={close}>
+    <Modal footer={false} open={!!item} onCancel={close}>
       <div className="user-info">
         <img src={item?.user?.profile_image?.medium} />
         {item?.user?.name}
@@ -24,8 +35,8 @@ export const ModalWindow: FC<ModalWIndowProps> = ({ isOpen, item, close }) => {
         </div>
       </div>
       <div className={"location"}>
-        <Location />
-        {item?.location?.name}
+        <Book />
+        {capitalizeAndAddDot(item?.description || item?.alt_description)}
       </div>
     </Modal>
   );

@@ -5,7 +5,7 @@ import { FC } from "react";
 
 const Router: FC = () => {
   const router = createBrowserRouter(
-    !localStorage.getItem("accessToken") ? accountRoutes : guestRoutes
+    localStorage.getItem("accessToken") ? accountRoutes : guestRoutes
   );
   return <RouterProvider router={router} />;
 };
