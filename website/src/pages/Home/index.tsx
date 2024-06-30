@@ -17,13 +17,13 @@ export const Home: FC = () => {
 
   const closeModal = () => setModalStatus(null);
 
-  const handleDownload = (e, link: string) => {
+  const handleDownload = (e: any, link: string) => {
     e.stopPropagation();
     e.preventDefault();
     window.open(link, "_blank", "noopener,noreferrer");
   };
 
-  const handleItemClick = (item) => {
+  const handleItemClick = (item: PhotoData) => {
     setModalStatus({ item });
   };
 
@@ -50,14 +50,14 @@ export const Home: FC = () => {
 
   const getMaxScrollPoint = () => {
     const rowsHeights: number[] = [];
-    wrapperRef.current.childNodes.forEach((item) =>
+    (wrapperRef!.current as any).childNodes!.forEach((item: any) =>
       rowsHeights.push(item.scrollHeight)
     );
     const scrollPoint = Math.min(...rowsHeights);
     maxScrollPoint !== scrollPoint && setMaxScrollPoint(scrollPoint);
   };
 
-  const onScroll = (e) => {
+  const onScroll = (e: any) => {
     getMaxScrollPoint();
     const item = e.target;
     if (lastList) return;

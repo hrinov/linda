@@ -105,7 +105,7 @@ interface PhotoData {
 }
 
 interface ModalWIndowProps {
-  item: PhotoData;
+  item: PhotoData | undefined;
   close: () => void;
 }
 

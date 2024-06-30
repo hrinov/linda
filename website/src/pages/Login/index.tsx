@@ -3,6 +3,10 @@ import { FC, useState } from "react";
 import EyeOpen from "./../../assets/icons/eye.svg?react";
 import EyeClose from "./../../assets/icons/eye-off.svg?react";
 import { useNavigate } from "react-router-dom";
+const url =
+  import.meta.env.MODE == "production"
+    ? import.meta.env.VITE_BASE_URL
+    : import.meta.env.LOCAL_LOCAL_URL;
 import "./index.sass";
 
 export const Login: FC = () => {
@@ -17,25 +21,33 @@ export const Login: FC = () => {
   const loginUser = async () => {
     setError("");
     setLoading(true);
-    const data = { email, password };
 
-    // const response: MeResponse = await requestHandler("login", "POST", data);
-    console.log(import.meta.env.PROD ? import.meta.env.VITE_BASE_URL : "/api/");
-    // setTimeout(() => {
-    //   if (response?.success) {
-    //     const { access_token } = response.data!;
+    const requestOptions = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, password }),
+    }
 
-    //     window.localStorage.setItem("accessToken", access_token);
-    //     window.localStorage.setItem("refreshToken", refresh_token);
-
-    //     setLoading(false);
-    //     navigate("/account/deposits/plans");
-    //   } else {
-    //     setLoading(false);
-    //     response?.message && setError(response?.message);
-    //   }
-    // }, 1000);
-  };
+    try {
+      const response = await fetch(url + 'login', requestOptions);
+      if (!response.ok) {
+        const error = await response.json()
+        throw new Error(error?.message);
+      }
+      const data = await response.json();
+     
+      if (data?.access_token) {
+         localStorage.setItem('access_token', data.accessToken);
+         navigate("/account/deposits/plans")
+      } else {setError("Something went wrong")}
+       
+    } catch (error: any) {
+      setError(error?.message || "Something went wrong")
+    }
+     setLoading(false);
+  }
 
   const createInput = (
     value: string,

@@ -1,0 +1,17 @@
+FROM node:20.15.0
+
+WORKDIR /website
+
+COPY website/. .
+
+RUN npm install
+
+RUN npm install -g typescript
+
+RUN npm install -g serve
+
+RUN npm run build:dev
+
+EXPOSE 4173
+
+CMD ["serve", "-s", "dist", "-l", "4173"]

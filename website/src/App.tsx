@@ -2,7 +2,6 @@ import { guestRoutes, accountRoutes } from "./pages/routes";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import "./app.sass";
 import { FC } from "react";
-
 const Router: FC = () => {
   const router = createBrowserRouter(
     localStorage.getItem("accessToken") ? accountRoutes : guestRoutes
