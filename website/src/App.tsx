@@ -36,7 +36,7 @@ const Router: FC = () => {
     setLoading(false);
   };
 
-  const router = createBrowserRouter(!user ? accountRoutes : guestRoutes);
+  const router = createBrowserRouter(user ? accountRoutes : guestRoutes);
 
   useEffect(() => {
     getUser();
