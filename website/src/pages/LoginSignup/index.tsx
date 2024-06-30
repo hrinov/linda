@@ -52,7 +52,7 @@ export const LoginSignup: FC<{type: string}> = ({type}) => {
   const handleChangePage = () => {
     setEmail("")
     setPassword("")
-    setError("")
+     setError("")
     navigate(type == "login" ? "/signup" : "/login")
   }
 

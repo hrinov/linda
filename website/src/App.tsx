@@ -7,7 +7,7 @@ const url =
   import.meta.env.MODE == "production"
     ? import.meta.env.VITE_BASE_URL
     : import.meta.env.VITE_LOCAL_URL;
-console.log(import.meta.env)
+
 const Router: FC = () => {
   const [loading, setLoading] = useState(true)
   const [user, setUser] = useState<User>()
