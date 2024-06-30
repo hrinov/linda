@@ -4,11 +4,12 @@ import ArrowDown from "./../../assets/icons/arrow-down.svg?react";
 import { ModalWindow } from "./components/ModalWindow";
 import "./index.sass";
 import { Header } from "./components/Header";
+import { Helmet } from "react-helmet-async";
 
 export const Home: FC = () => {
   const [modalStatus, setModalStatus] = useState<{ item: PhotoData } | null>();
   const wrapperRef = useRef(null);
-  const [mobileMode, setMobileMode] = useState<boolean>(false); 
+  const [mobileMode, setMobileMode] = useState<boolean>(false);
   const [rows, setRows] = useState(mobileMode ? 1 : 3);
   const [list, setList] = useState<PhotoData[]>([]);
   const [page, setPage] = useState(1);
@@ -115,23 +116,28 @@ export const Home: FC = () => {
   }, [page]);
 
   useEffect(() => {
-   const checkWindowSize = () => {
-    setMobileMode(window.innerWidth < 768)
-    if (window.innerWidth < 768) {
-      setRows(1)
-    } else {
-      setRows(3)
-    }
-   }
+    const checkWindowSize = () => {
+      setMobileMode(window.innerWidth < 768);
+      if (window.innerWidth < 768) {
+        setRows(1);
+      } else {
+        setRows(3);
+      }
+    };
     checkWindowSize();
-    window.addEventListener('resize', checkWindowSize);
+    window.addEventListener("resize", checkWindowSize);
 
-    return () => {window.removeEventListener('resize', checkWindowSize)}
-  }, [])
-
+    return () => {
+      window.removeEventListener("resize", checkWindowSize);
+    };
+  }, []);
 
   return (
     <>
+      <Helmet>
+        <title>Linda-homepage</title>
+      </Helmet>
+      ;
       <section className="main-wrapper" onScroll={onScroll}>
         <Header {...{ rows, setRows, mobileMode }} />
         <SwitchTransition mode={"out-in"}>

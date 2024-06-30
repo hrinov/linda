@@ -3,6 +3,7 @@ import { FC, useState } from "react";
 import EyeOpen from "../../assets/icons/eye.svg?react";
 import EyeClose from "../../assets/icons/eye-off.svg?react";
 import { useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 
 const url =
   import.meta.env.MODE == "production"
@@ -10,8 +11,8 @@ const url =
     : import.meta.env.VITE_LOCAL_URL;
 import "./index.sass";
 
-export const LoginSignup: FC<{type: string}> = ({type}) => {
-  const navigate = useNavigate()
+export const LoginSignup: FC<{ type: string }> = ({ type }) => {
+  const navigate = useNavigate();
   const [error, setError] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
@@ -23,38 +24,39 @@ export const LoginSignup: FC<{type: string}> = ({type}) => {
     setLoading(true);
 
     const requestOptions = {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
       body: JSON.stringify({ email, password }),
-    }
+    };
 
     try {
       const response = await fetch(url + type, requestOptions);
       if (!response.ok) {
-        const error = await response.json()
+        const error = await response.json();
         throw new Error(error?.message);
       }
       const data = await response.json();
- 
+
       if (data?.access_token) {
-         localStorage.setItem('access_token', data.access_token);
-         window.location.href = "/account/home"
-      } else {setError("Something went wrong")}
-       
+        localStorage.setItem("access_token", data.access_token);
+        window.location.href = "/account/home";
+      } else {
+        setError("Something went wrong");
+      }
     } catch (error: any) {
-      setError(error?.message || "Something went wrong")
+      setError(error?.message || "Something went wrong");
     }
-     setLoading(false);
-  }
+    setLoading(false);
+  };
 
   const handleChangePage = () => {
-    setEmail("")
-    setPassword("")
-     setError("")
-    navigate(type == "login" ? "/signup" : "/login")
-  }
+    setEmail("");
+    setPassword("");
+    setError("");
+    navigate(type == "login" ? "/signup" : "/login");
+  };
 
   const createInput = (
     value: string,
@@ -86,28 +88,39 @@ export const LoginSignup: FC<{type: string}> = ({type}) => {
   const isFormNotFilled = !email || !password;
 
   return (
-    <section className="login-page">
-      <button
-        children={type == "login" ? "Sign Up": "Login"}
-        className={"signup-btn"}
-        onClick={handleChangePage}
-      />
+    <>
+      <Helmet>
+        <title>Linda-{type}</title>
+      </Helmet>
 
-      <div className="inputs-wrapper">
-        <div className="title-wrapper" children={type == "login" ? "Login" : "SignUp"} />
-        {createInput(email, "email", (e) => setEmail(e.target.value))}
-        {createInput(password, "password", (e) => setPassword(e.target.value))}
-        <div
-          className="ok-btn"
-          onClick={() => !isFormNotFilled && loginUser()}
-          children={"NEXT"}
+      <section className="login-page">
+        <button
+          children={type == "login" ? "Sign Up" : "Login"}
+          className={"signup-btn"}
+          onClick={handleChangePage}
         />
-        <div
-          className={`error-message ${!error && "transparent"}`}
-          children={error}
-        />
-        {loading && <div className="spin-wrapper" children={<Spin />} />}
-      </div>
-    </section>
+
+        <div className="inputs-wrapper">
+          <div
+            className="title-wrapper"
+            children={type == "login" ? "Login" : "SignUp"}
+          />
+          {createInput(email, "email", (e) => setEmail(e.target.value))}
+          {createInput(password, "password", (e) =>
+            setPassword(e.target.value)
+          )}
+          <div
+            className="ok-btn"
+            onClick={() => !isFormNotFilled && loginUser()}
+            children={"NEXT"}
+          />
+          <div
+            className={`error-message ${!error && "transparent"}`}
+            children={error}
+          />
+          {loading && <div className="spin-wrapper" children={<Spin />} />}
+        </div>
+      </section>
+    </>
   );
 };
