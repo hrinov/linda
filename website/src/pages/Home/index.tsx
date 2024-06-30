@@ -62,9 +62,9 @@ export const Home: FC = () => {
     getMaxScrollPoint();
     const item = e.target;
     if (lastList) return;
-    const { scrollTop, scrollTopMax } = item;
+    const { scrollTop, clientHeight, scrollHeight } = item;
 
-    if (scrollTop == scrollTopMax) {
+    if (scrollTop + clientHeight >= scrollHeight - 10) {
       setPage((prevPage) => prevPage + 1);
     }
   };
