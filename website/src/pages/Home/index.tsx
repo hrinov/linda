@@ -4,7 +4,6 @@ import ArrowDown from "./../../assets/icons/arrow-down.svg?react";
 import { ModalWindow } from "./components/ModalWindow";
 import "./index.sass";
 import { Header } from "./components/Header";
-import { Helmet } from "react-helmet";
 
 export const Home: FC = () => {
   const [modalStatus, setModalStatus] = useState<{ item: PhotoData } | null>();
@@ -134,10 +133,6 @@ export const Home: FC = () => {
 
   return (
     <>
-      <Helmet>
-        <title>Linda homepage</title>
-      </Helmet>
-      ;
       <section className="main-wrapper" onScroll={onScroll}>
         <Header {...{ rows, setRows, mobileMode }} />
         <SwitchTransition mode={"out-in"}>

@@ -3,7 +3,6 @@ import { FC, useState } from "react";
 import EyeOpen from "../../assets/icons/eye.svg?react";
 import EyeClose from "../../assets/icons/eye-off.svg?react";
 import { useNavigate } from "react-router-dom";
-import { Helmet } from "react-helmet";
 
 const url =
   import.meta.env.MODE == "production"
@@ -88,39 +87,31 @@ export const LoginSignup: FC<{ type: string }> = ({ type }) => {
   const isFormNotFilled = !email || !password;
 
   return (
-    <>
-      <Helmet>
-        <title>Linda first page</title>
-      </Helmet>
+    <section className="login-page">
+      <button
+        children={type == "login" ? "Sign Up" : "Login"}
+        className={"signup-btn"}
+        onClick={handleChangePage}
+      />
 
-      <section className="login-page">
-        <button
-          children={type == "login" ? "Sign Up" : "Login"}
-          className={"signup-btn"}
-          onClick={handleChangePage}
+      <div className="inputs-wrapper">
+        <div
+          className="title-wrapper"
+          children={type == "login" ? "Login" : "SignUp"}
         />
-
-        <div className="inputs-wrapper">
-          <div
-            className="title-wrapper"
-            children={type == "login" ? "Login" : "SignUp"}
-          />
-          {createInput(email, "email", (e) => setEmail(e.target.value))}
-          {createInput(password, "password", (e) =>
-            setPassword(e.target.value)
-          )}
-          <div
-            className="ok-btn"
-            onClick={() => !isFormNotFilled && loginUser()}
-            children={"NEXT"}
-          />
-          <div
-            className={`error-message ${!error && "transparent"}`}
-            children={error}
-          />
-          {loading && <div className="spin-wrapper" children={<Spin />} />}
-        </div>
-      </section>
-    </>
+        {createInput(email, "email", (e) => setEmail(e.target.value))}
+        {createInput(password, "password", (e) => setPassword(e.target.value))}
+        <div
+          className="ok-btn"
+          onClick={() => !isFormNotFilled && loginUser()}
+          children={"NEXT"}
+        />
+        <div
+          className={`error-message ${!error && "transparent"}`}
+          children={error}
+        />
+        {loading && <div className="spin-wrapper" children={<Spin />} />}
+      </div>
+    </section>
   );
 };
